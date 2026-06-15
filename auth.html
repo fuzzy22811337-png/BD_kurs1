@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RegPorts — Вход</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+  <!-- Сообщение об ошибке / успехе -->
+  <div class="message" id="message"></div>
+
+  <!-- Карточка авторизации -->
+  <div class="card" id="card">
+
+    <!-- Переключатель вкладок -->
+    <div class="tabs">
+      <button class="tab active" id="tab-login" onclick="switchTab('login')">Войти</button>
+      <button class="tab" id="tab-register" onclick="switchTab('register')">Регистрация</button>
+      <div class="tab-indicator" id="tab-indicator"></div>
+    </div>
+
+    <!-- Форма войти -->
+    <form class="form" id="form-login">
+      <div class="field">
+        <label>Никнейм</label>
+        <input type="text" id="login-nickname" placeholder="Введите никнейм" required>
+      </div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="login-password" placeholder="Введите пароль" required>
+      </div>
+      <button type="submit" class="btn" id="btn-login">Войти</button>
+    </form>
+
+    <!-- Форма регистрации -->
+    <form class="form hidden" id="form-register">
+      <div class="field">
+        <label>Номер телефона</label>
+        <input type="tel" id="reg-tele" placeholder="+7 999 000 00 00" required>
+      </div>
+      <div class="field">
+        <label>ФИО</label>
+        <input type="text" id="reg-fio" placeholder="Иванов Иван Иванович" required>
+      </div>
+      <div class="field">
+        <label>Никнейм</label>
+        <input type="text" id="reg-nickname" placeholder="Придумайте никнейм" required>
+      </div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="reg-password" placeholder="Придумайте пароль" required>
+      </div>
+      <button type="submit" class="btn" id="btn-register">Зарегистрироваться</button>
+    </form>
+
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

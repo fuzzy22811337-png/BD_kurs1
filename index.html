@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RegPorts — Главная</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ===== Навбар ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">RegPorts</a>
+
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link active">Главная</a>
+      <a href="bookings.html" class="nav-link">Бронь портов</a>
+      <a href="devices.html"  class="nav-link">Устройства</a>
+    </div>
+
+    <!-- Кнопка Выйти -->
+    <button class="btn-logout" onclick="logout()">Выйти</button>
+
+    <!-- Кнопка Аккаунт -->
+    <div class="nav-account" id="nav-account">
+      <button class="btn-account" id="btn-account" onclick="toggleAccountDropdown()">
+        <span id="account-nickname">Загрузка…</span>
+      </button>
+
+      <!-- Меню аккаунта -->
+      <div class="account-dropdown hidden" id="account-dropdown">
+        <div class="account-scroll">
+          <div class="account-info">
+            <div class="account-info-row">
+              <span class="info-label">Никнейм</span>
+              <span class="info-value" id="info-nickname">—</span>
+            </div>
+            <div class="account-info-row">
+              <span class="info-label">Телефон</span>
+              <span class="info-value" id="info-tele">—</span>
+            </div>
+            <div class="account-info-row">
+              <span class="info-label">ФИО</span>
+              <span class="info-value" id="info-fio">—</span>
+            </div>
+          </div>
+
+          <div class="account-divider"></div>
+
+          <div class="account-actions">
+            <button class="btn-edit"   onclick="editAccount()">Редактировать</button>
+            <button class="btn-delete" onclick="deleteAccount()">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Карточка редактирования профиля ===== -->
+  <div class="modal-overlay hidden" id="edit-modal" onclick="handleEditOverlayClick(event)">
+    <div class="edit-card" id="edit-card">
+      <div class="edit-card-title">Редактирование профиля</div>
+      <div class="edit-fields">
+        <div class="edit-field">
+          <label class="edit-label">Никнейм</label>
+          <input class="edit-input" type="text" id="edit-nickname" placeholder="Никнейм">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Телефон</label>
+          <input class="edit-input" type="tel" id="edit-tele" placeholder="Телефон">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">ФИО</label>
+          <input class="edit-input" type="text" id="edit-fio" placeholder="ФИО">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Новый пароль <span class="edit-label-hint">(оставьте пустым если не меняете)</span></label>
+          <input class="edit-input" type="password" id="edit-password" placeholder="Новый пароль">
+        </div>
+      </div>
+      <div class="edit-card-actions">
+        <button class="edit-btn-confirm" onclick="submitEdit()">Далее</button>
+        <button class="edit-btn-cancel" onclick="closeEditModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Таблица ===== -->
+  <main class="page-body">
+    <div class="page-title">Порты</div>
+
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table id="ports-table">
+          <thead>
+            <tr>
+
+              <!-- Никнейм -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn active" id="sort-nickname" title="Сортировать" onclick="handleSort('nickname', this)">↑</button>
+                    <button class="ctrl-btn" id="filter-nickname" title="Фильтр" onclick="openFilter('nickname', this)">⊟</button>
+                  </div>
+                  Никнейм
+                </div>
+              </th>
+
+              <!-- ФИО -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-fio" title="Сортировать" onclick="handleSort('fio', this)">↕</button>
+                    <button class="ctrl-btn" id="filter-fio" title="Фильтр" onclick="openFilter('fio', this)">⊟</button>
+                  </div>
+                  ФИО
+                </div>
+              </th>
+
+              <!-- Телефон -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-tele" title="Сортировать" onclick="handleSort('tele', this)">↕</button>
+                    <button class="ctrl-btn" id="filter-tele" title="Фильтр" onclick="openFilter('tele', this)">⊟</button>
+                  </div>
+                  Телефон
+                </div>
+              </th>
+
+              <!-- Устройство -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-device_name" title="Сортировать" onclick="handleSort('device_name', this)">↕</button>
+                    <button class="ctrl-btn" id="filter-device_name" title="Фильтр" onclick="openFilter('device_name', this)">⊟</button>
+                  </div>
+                  Устройство
+                </div>
+              </th>
+
+              <!-- Время бронирования -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-booking_time" title="Сортировать" onclick="handleSort('booking_time', this)">↕</button>
+                  </div>
+                  Бронирование
+                </div>
+              </th>
+
+              <!-- ID порта -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-port_id" title="Сортировать" onclick="handleSort('port_id', this)">↕</button>
+                    <button class="ctrl-btn" id="filter-port_id" title="Фильтр" onclick="openFilter('port_id', this)">⊟</button>
+                  </div>
+                  ID порта
+                </div>
+              </th>
+
+              <!-- Порт -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-port_name" title="Сортировать" onclick="handleSort('port_name', this)">↕</button>
+                    <button class="ctrl-btn" id="filter-port_name" title="Фильтр" onclick="openFilter('port_name', this)">⊟</button>
+                  </div>
+                  Порт
+                </div>
+              </th>
+
+              <!-- Статус порта -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-port_status" title="Сортировать" onclick="handleSort('port_status', this)">↕</button>
+                    <!-- <button class="ctrl-btn" id="filter-port_status" title="Фильтр" onclick="openFilter('port_status', this)">⊟</button> -->
+                  </div>
+                  Статус порта
+                </div>
+              </th>
+
+              <!-- Описание порта -->
+              <th>
+                <div class="th-inner">Назначение порта</div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody id="ports-body">
+            <tr>
+              <td colspan="8">
+                <div class="table-state">
+                  <div class="spinner"></div>
+                  Загрузка данных…
+                </div>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Карточка Фильтра ===== -->
+  <div class="filter-card hidden" id="filter-card">
+    <div class="filter-card-label" id="filter-card-label">Фильтр</div>
+    <input type="text" id="filter-input" placeholder="Введите значение…">
+    <div class="filter-card-actions">
+      <button class="btn-filter-find"   onclick="applyFilter()">Найти</button>
+      <button class="btn-filter-cancel" onclick="closeFilter()">Отмена</button>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+  <script src="ports.js"></script>
+</body>
+</html>

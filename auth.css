@@ -1,0 +1,234 @@
+/* ===== Импорты ===== */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&family=Geologica:wght@300;400;500&display=swap');
+
+/* ===== Переменные ===== */
+:root {
+  --bg:         #0d0f14;
+  --surface:    #161920;
+  --border:     #2a2d38;
+  --accent:     #4f8ef7;
+  --accent-2:   #7b5cf5;
+  --text:       #e8eaf0;
+  --lable:      #6b7080;
+  --error:      #f75f5f;
+  --success:    #4fcf8e;
+  --bg-shadow:  rgba(0, 0, 0, 0.3);
+  --accent-shadow: rgba(79, 142, 247, 0.1);
+  --error-shadow:  rgba(247, 95, 95, 0.1);
+  --radius:       14px;
+  --transition:   0.5s ease;
+  --font-family:  'Geologica', Arial;
+  --font-size:    15px;
+}
+
+/* ===== Сброс стилей ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Страница ===== */
+body {
+  background: var(--bg);
+  font-family: var(--font-family);
+  color: var(--text);
+  min-height: 100vh;
+  min-width: 800px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Сообщение ===== */
+.message {
+  font-size: var(--font-size);
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  animation: max-height var(--transition), padding var(--transition), margin var(--transition);
+}
+
+.message.show {
+  max-height: 60px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  animation: fadeUpMsg var(--transition) both; 
+}
+
+.message.error {
+  color: var(--error);
+  background: var(--error-shadow);
+  border: 1px solid var(--error);
+}
+
+.message.success {
+  color: var(--success);
+  background: rgba(79, 207, 142, 0.1);
+  border: 1px solid var(--success);
+}
+
+@keyframes fadeUpMsg {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Карта ===== */
+.card {
+  width: fit-content;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 35px 40px;
+  box-shadow: 0 20px 40px var(--bg-shadow);
+  animation: fadeUp var(--transition) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Вкладки формы ===== */
+.tabs {
+  display: flex;
+  position: relative;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 6px;
+  margin-bottom: 28px;
+  gap: 6px; 
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--lable);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  padding: 10px;
+  outline: none;
+  outline-color: var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: color var(--transition), outline-color 0.5s ease-in, box-shadow 0.5s ease-in;
+}
+
+.tab.active {
+  color: var(--text);
+}
+
+.tab:focus {
+  outline: 1px var(--accent) solid;
+  box-shadow: 0 0 0 3px var(--accent-shadow);
+}
+
+/* Скользящий индикатор */
+.tab-indicator {
+  position: absolute;
+  top: 4px;
+  left: 0px;
+  height: calc(100% - 8px);
+  background: var(--surface);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: transform var(--transition), width var(--transition);
+  z-index: 0;
+}
+
+/* ===== Форма ===== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fadeUpForm var(--transition) both;
+}
+
+.form.hidden {
+  display: none;
+}
+
+@keyframes fadeUpForm {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Поля формы ===== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--lable);
+}
+
+input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+
+input::placeholder {
+  color: var(--lable);
+  opacity: 0.6;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-shadow);
+}
+
+/* input.error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px var(--error-shadow);
+} */
+
+/* ===== Кнопка формы ===== */
+.btn {
+  margin-top: 6px;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--text);
+  font-family: 'Geologica', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 20px var(--accent-shadow);
+}
+
+.btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px var(--accent-shadow);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}

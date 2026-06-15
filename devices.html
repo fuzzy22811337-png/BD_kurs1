@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RegPorts — Устройства</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ===== Навбар (идентичен index.html) ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">RegPorts</a>
+
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link">Главная</a>
+      <a href="bookings.html" class="nav-link">Бронь портов</a>
+      <a href="devices.html"  class="nav-link active">Устройства</a>
+    </div>
+
+    <!-- Кнопка Выйти -->
+    <button class="btn-logout" onclick="logout()">Выйти</button>
+
+    <!-- Кнопка Аккаунт -->
+    <div class="nav-account" id="nav-account">
+      <button class="btn-account" id="btn-account" onclick="toggleAccountDropdown()">
+        <span id="account-nickname">Загрузка…</span>
+      </button>
+
+      <!-- Меню аккаунта -->
+      <div class="account-dropdown hidden" id="account-dropdown">
+        <div class="account-scroll">
+          <div class="account-info">
+            <div class="account-info-row">
+              <span class="info-label">Никнейм</span>
+              <span class="info-value" id="info-nickname">—</span>
+            </div>
+            <div class="account-info-row">
+              <span class="info-label">Телефон</span>
+              <span class="info-value" id="info-tele">—</span>
+            </div>
+            <div class="account-info-row">
+              <span class="info-label">ФИО</span>
+              <span class="info-value" id="info-fio">—</span>
+            </div>
+          </div>
+
+          <div class="account-divider"></div>
+
+          <div class="account-actions">
+            <button class="btn-edit"   onclick="editAccount()">Редактировать</button>
+            <button class="btn-delete" onclick="deleteAccount()">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Карточка редактирования профиля ===== -->
+  <div class="modal-overlay hidden" id="edit-modal" onclick="handleEditOverlayClick(event)">
+    <div class="edit-card" id="edit-card">
+      <div class="edit-card-title">Редактирование профиля</div>
+      <div class="edit-fields">
+        <div class="edit-field">
+          <label class="edit-label">Никнейм</label>
+          <input class="edit-input" type="text" id="edit-nickname" placeholder="Никнейм">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Телефон</label>
+          <input class="edit-input" type="tel" id="edit-tele" placeholder="Телефон">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">ФИО</label>
+          <input class="edit-input" type="text" id="edit-fio" placeholder="ФИО">
+        </div>
+        <div class="edit-field">
+          <label class="edit-label">Новый пароль <span class="edit-label-hint">(оставьте пустым если не меняете)</span></label>
+          <input class="edit-input" type="password" id="edit-password" placeholder="Новый пароль">
+        </div>
+      </div>
+      <div class="edit-card-actions">
+        <button class="edit-btn-confirm" onclick="submitEdit()">Далее</button>
+        <button class="edit-btn-cancel" onclick="closeEditModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Таблица устройств ===== -->
+  <main class="page-body">
+    <div class="page-header">
+      <div class="page-title">Устройства</div>
+      <button class="btn-add" onclick="addDevice()">+ Добавить устройство</button>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table id="devices-table">
+          <thead>
+            <tr>
+              
+              <!-- Столбец действий — без заголовка -->
+              <th style="width: 68px;"></th>
+
+              <!-- ID -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn active" id="sort-device_id" title="Сортировать" onclick="handleSort('device_id', this)">↑</button>
+                    <button class="ctrl-btn" id="filter-device_id" title="Фильтр" onclick="openFilter('device_id', this)">⊟</button>
+                  </div>
+                  ID
+                </div>
+              </th>
+
+              <!-- Название -->
+              <th>
+                <div class="th-inner">
+                  <div class="col-controls">
+                    <button class="ctrl-btn" id="sort-device_name" title="Сортировать" onclick="handleSort('device_name', this)">↑</button>
+                    <button class="ctrl-btn" id="filter-device_name" title="Фильтр" onclick="openFilter('device_name', this)">⊟</button>
+                  </div>
+                  Название устройства
+                </div>
+              </th>
+            
+            </tr>
+          </thead>
+
+          <tbody id="devices-body">
+            <tr>
+              <td colspan="3">
+                <div class="table-state">
+                  <div class="spinner"></div>
+                  Загрузка…
+                </div>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== Карточка Фильтра ===== -->
+  <div class="filter-card hidden" id="filter-card">
+    <div class="filter-card-label" id="filter-card-label">Фильтр</div>
+    <input type="text" id="filter-input" placeholder="Введите значение…">
+    <div class="filter-card-actions">
+      <button class="btn-filter-find"   onclick="applyFilter()">Найти</button>
+      <button class="btn-filter-cancel" onclick="closeFilter()">Отмена</button>
+    </div>
+  </div>
+
+  <!-- ===== Карточка добавления/редактирования устройства ===== -->
+  <div class="modal-overlay hidden" id="device-modal" onclick="handleDeviceOverlayClick(event)">
+    <div class="edit-card" id="device-card">
+      <div class="edit-card-title" id="device-modal-title">Добавить устройство</div>
+      <div class="edit-fields">
+        <div class="edit-field">
+          <label class="edit-label">Название устройства</label>
+          <input class="edit-input" type="text" id="device-name-input" placeholder="Введите название…">
+        </div>
+      </div>
+      <div class="edit-card-actions">
+        <button class="edit-btn-confirm" id="device-modal-confirm" onclick="submitDevice()">Добавить</button>
+        <button class="edit-btn-cancel" onclick="closeDeviceModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+   
+  <!-- index.js первым - общий код (авторизация, навбар, профиль) -->
+  <script src="index.js"></script>
+  <!-- devices.js - специфичный код -->
+  <script src="devices.js"></script>
+</body>
+</html>

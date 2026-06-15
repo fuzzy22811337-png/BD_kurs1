@@ -1,0 +1,725 @@
+/* ===== Импорты ===== */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&family=Geologica:wght@300;400;500&display=swap');
+
+/* ===== Переменные ===== */
+:root {
+  --bg:                 #0d0f14;
+  --surface:            #161920;
+  --btn-surface-active: rgba(79,142,247,0.1);
+  --btn-surface-hover:  rgba(255,255,255,0.05);
+  --surface-2:          #1c2030;
+  --border:             #2a2d38;
+  --accent:             #4f8ef7;
+  --accent-2:           #7b5cf5;
+  --text:               #e8eaf0;
+  --lable:              #6b7080;
+  --error:              #f75f5f;
+  --success:            #4fcf8e;
+  --bg-shadow:          rgba(0,0,0,0.4);
+  --accent-shadow:      rgba(79,142,247,0.15);
+  --radius:             14px;
+  --transition:         0.35s ease;
+  --font-family:        'Geologica', Arial;
+  --font-size:          15px;
+  --nav-height:         64px;
+  --a: rgba(22,25,32,0.55);
+}
+
+/* ===== Сброс стилей ===== */
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  font-family: var(--font-family);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ===== Навбар ===== */
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 1280px;
+  height: var(--nav-height);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  gap: 6px;
+  z-index: 1000;
+  transition: top var(--transition), background var(--transition), box-shadow var(--transition), border-color var(--transition);
+  box-shadow: 0 20px 40px var(--bg-shadow);
+}
+
+.navbar.stuck {
+  top: 0;
+  border-radius: 0 0 20px 20px;
+  width: 100%;
+  max-width: 100%;
+  background: var(--surface);
+  border-top-color: transparent;
+  box-shadow: 0 20px 40px var(--bg-shadow);
+}
+
+.nav-logo {
+  font-family: 'Unbounded', 'MS Sans Serif', Arial;
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: -0.3px; 
+  margin-right: 10px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-link {
+  padding: 10px;
+  border-radius: var(--radius);
+  font-size: var(--font-size);
+  color: var(--lable);
+  text-decoration: none;
+  transition: color var(--transition), background var(--transition);
+  white-space: nowrap;
+}
+
+.nav-link:hover { 
+  color: var(--text); 
+  background: var(--btn-surface-hover); 
+}
+
+.nav-link.active { 
+  color: var(--text); 
+  /* background: #1D2737; */
+  background: var(--btn-surface-active);
+}
+
+/* ===== Время бронирования ===== */
+.booking-time {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums; /* цифры одинаковой ширины — не прыгают */
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+
+
+/* Кнопка Выйти */
+.btn-logout {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--lable);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-logout:hover {
+  color: var(--error);
+  border-color: var(--error);
+  background: rgba(247,95,95,0.2);
+}
+
+/* Кнопка Аккаунта */
+.nav-account {
+  position: relative;
+  margin-left: auto;
+}
+
+.btn-account {
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 20px var(--accent-shadow);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-account::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text);
+  transition: transform var(--transition);
+}
+
+.btn-account.open::after { transform: rotate(180deg); }
+
+.btn-account:hover { 
+  opacity: 0.92; 
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 24px var(--accent-shadow);
+}
+
+/* Меню Аккаунта */
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px var(--bg-shadow);
+  animation: dropDown 0.25s ease both;
+  z-index: 2000;
+  max-height: 45vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-scroll {
+  overflow-y: auto;
+  min-height: 0;
+  padding: 12px;
+}
+
+.account-dropdown.hidden { display: none; }
+
+@keyframes dropDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.account-info { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 18px; 
+  margin-bottom: 18px; 
+}
+
+.account-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-label {
+  font-size: 13px;
+  color: var(--lable);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.account-info-row, .info-value {
+  font-size: var(--font-size);
+  color: var(--text);
+}
+
+.account-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 0 18px;
+}
+
+.account-actions { 
+  display: flex; 
+  gap: 16px; 
+}
+
+.btn-edit, .btn-delete {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn-edit {
+  background: rgba(79,142,247,0.1);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-edit:hover { background: rgba(79,142,247,0.2); }
+
+.btn-delete {
+  background: rgba(247,95,95,0.1);
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.btn-delete:hover { background: rgba(247,95,95,0.2); }
+
+/* ===== Страница ===== */
+.page-body {
+  padding-top: calc(var(--nav-height) + 40px);
+  padding-bottom: 60px;
+  padding-left: 24px;
+  padding-right: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+
+/* ===== Таблица ===== */
+.table-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px var(--bg-shadow);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size);
+}
+
+/* Заголовок */
+thead tr {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  padding: 14px 10px;
+  color: var(--lable);
+  font-size: var(--font-size);
+  font-weight: 500;
+  white-space: nowrap;
+  text-align: left;
+  position: relative;
+}
+
+th .th-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.col-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.ctrl-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--lable);
+  font-size: 11px;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+  padding: 0;
+  line-height: 1;
+}
+
+.ctrl-btn:hover { background: var(--surface-2); color: var(--text); }
+.ctrl-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+/* tbody rows */
+tbody tr {
+  border-bottom: 1px solid rgba(42,45,56,0.6);
+  transition: background var(--transition);
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+td {
+  padding: 13px 10px;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+td.empty-cell { 
+  color: var(--lable); 
+  font-style: italic; 
+}
+
+/* Статусный бейдж */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.free { 
+  background: rgba(79,207,142,0.1); 
+  color: var(--success); 
+  border: 1px solid rgba(79,207,142,0.2); 
+}
+
+.badge.booked { 
+  background: rgba(247,95,95,0.1);   
+  color: var(--error);   
+  border: 1px solid rgba(247,95,95,0.2); 
+}
+
+/* ===== Карточка фильтра ===== */
+.filter-card {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 12px 40px var(--bg-shadow);
+  z-index: 3000;
+  min-width: 220px;
+  animation: dropDown 0.2s ease both;
+}
+
+.filter-card.hidden { display: none; }
+
+.filter-card input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: 14px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  margin-bottom: 10px;
+}
+
+.filter-card input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-shadow);
+}
+
+.filter-card-label {
+  font-size: 12px;
+  color: var(--lable);
+  margin-bottom: 8px;
+}
+
+.filter-card-actions { display: flex; gap: 8px; }
+
+.btn-filter-find {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+
+.btn-filter-find:hover { opacity: 0.88; }
+
+.btn-filter-cancel {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--lable);
+  font-family: var(--font-family);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.btn-filter-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+/* ===== Статус загрузки и ошибки таблицы ===== */
+.table-state {
+  padding: 48px;
+  text-align: center;
+  color: var(--lable);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 30px; height: 30px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 14px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--lable); }
+
+
+
+
+
+/* ===========================
+   МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+=========================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;                          /* top/right/bottom/left = 0 */
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.2s ease both;
+}
+.modal-overlay.hidden { display: none; }
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.edit-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  animation: fadeUp 0.25s ease both;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.edit-card-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-label {
+  font-size: 13px;
+  color: var(--lable);
+  letter-spacing: 0.02em;
+}
+
+.edit-label-hint {
+  font-size: 11px;
+  color: var(--lable);
+  opacity: 0.7;
+}
+
+.edit-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+.edit-input::placeholder { color: var(--lable); opacity: 0.5; }
+.edit-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-shadow);
+}
+
+.edit-card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn-confirm {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+  box-shadow: 0 4px 16px var(--accent-shadow);
+}
+.edit-btn-confirm:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.edit-btn-cancel {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--lable);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+.edit-btn-cancel:hover {
+  color: var(--text);
+  border-color: var(--label);
+  background: rgba(255,255,255,0.04);
+}
+
+
+/* ===========================
+   СТРАНИЦА УСТРОЙСТВ
+=========================== */
+
+/* Заголовок страницы с кнопкой добавления */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.btn-add {
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 3px 14px var(--accent-shadow);
+  transition: opacity var(--transition), transform var(--transition);
+}
+.btn-add:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* Кнопки действий в строке таблицы */
+.row-actions {
+  display: flex;
+  gap: 4px;
+  padding: 0 6px;
+}
+
+/* Переопределяем цвет hover для конкретных кнопок строки */
+.row-btn-delete:hover {
+  background: rgba(247, 95, 95, 0.15) !important;
+  color: var(--error) !important;
+  border-color: var(--error) !important;
+}
+
+.row-btn-edit:hover {
+  background: rgba(79, 142, 247, 0.15) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+/*===========================
+   ВВОД ВРЕМЕНИ БРОНИРОВАНИЯ
+===========================*/
+ 
+.time-inputs-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+ 
+.time-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+ 
+/* Убираем стрелки у number-инпутов времени */
+.time-input::-webkit-inner-spin-button,
+.time-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+ 
+.time-input {
+  width: 100%;
+  text-align: center;
+  padding: 11px 8px !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+ 
+.time-input-label {
+  font-size: 12px;
+  color: var(--lable);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  order: 1; /* подпись над полем */
+}
+
+.booking-input::-webkit-inner-spin-button,
+.booking-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
